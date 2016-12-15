@@ -144,6 +144,11 @@ public class GoldModel implements GameModel {
         this.pcs.removePropertyChangeListener(listener);
     }
 
+    public int getUpdateSpeed(){
+        return 150;
+    }
+
+
     /**
      * Insert another coin into the gameboard.
      */

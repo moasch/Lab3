@@ -68,7 +68,19 @@ public class GameController implements Runnable {
 	 * Add a key press to the end of the queue
 	 */
 	private synchronized void enqueueKeyPress(final int key) {
-		this.keypresses.add(Integer.valueOf(key));
+		if(gameModel.getUpdateSpeed() < 0){
+			try {
+				// Tell model to update, send next key press.
+				// or 0 if no new keypress since last update.
+				this.gameModel.gameUpdate(key);
+
+			} catch (GameOverException e) {
+				// we got a game over signal, time to exit...
+				// The current implementation ignores the game score
+				this.isRunning = false;
+				System.out.println("Game over: " + e.getScore());
+			}
+		}else this.keypresses.add(Integer.valueOf(key));
 	}
 
 	/**
@@ -145,7 +157,7 @@ public class GameController implements Runnable {
 	 */
 	@Override
 	public void run() {
-		while (this.isRunning) {
+		while (this.isRunning && gameModel.getUpdateSpeed() > 0) {
 			try {
 				// Tell model to update, send next key press.
 				// or 0 if no new keypress since last update.
@@ -153,7 +165,7 @@ public class GameController implements Runnable {
 
 				//this.view.repaint();
 
-				Thread.sleep(this.updateInterval);
+				Thread.sleep(gameModel.getUpdateSpeed());
 			} catch (GameOverException e) {
 				// we got a game over signal, time to exit...
 				// The current implementation ignores the game score

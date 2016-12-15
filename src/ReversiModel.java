@@ -133,6 +133,10 @@ public class ReversiModel implements GameModel {
         this.pcs.removePropertyChangeListener(listener);
     }
 
+    public int getUpdateSpeed(){
+        return -1;
+    }
+
     /**
      * Return whether the specified position is empty. If it only consists
      * of a blank tile, it is considered empty.

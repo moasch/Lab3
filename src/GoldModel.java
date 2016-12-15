@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,6 +108,8 @@ public class GoldModel implements GameModel {
      */
     private int score;
 
+    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+
     /**
      * Create a new model for the gold game.
      */
@@ -132,6 +136,13 @@ public class GoldModel implements GameModel {
         }
     }
 
+    public void addObserver(PropertyChangeListener listener){
+        this.pcs.addPropertyChangeListener(listener);
+    }
+
+    public void removeObserver(PropertyChangeListener listener){
+        this.pcs.removePropertyChangeListener(listener);
+    }
 
     /**
      * Insert another coin into the gameboard.
@@ -202,6 +213,8 @@ public class GoldModel implements GameModel {
     @Override
     public void gameUpdate(final int lastKey) throws GameOverException {
         updateDirection(lastKey);
+
+        this.pcs.firePropertyChange("gameUpdate", 0, 1);
 
         // Erase the previous position.
         gameUtils.setGameboardState(this.collectorPos, BLANK_TILE, gameboardState);

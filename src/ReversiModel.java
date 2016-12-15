@@ -1,6 +1,9 @@
+import javax.swing.event.SwingPropertyChangeSupport;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 /**
  * A somewhat defective implementation of the game Reversi. The purpose
@@ -9,6 +12,8 @@ import java.awt.event.KeyEvent;
  * @author evensen
  */
 public class ReversiModel implements GameModel {
+
+
     public enum Direction {
         EAST(1, 0),
         SOUTHEAST(1, 1),
@@ -84,6 +89,8 @@ public class ReversiModel implements GameModel {
     private final int height;
     private boolean gameOver;
 
+    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+
     public ReversiModel() {
         this.width = Constants.getGameSize().width;
         this.height = Constants.getGameSize().height;
@@ -115,6 +122,15 @@ public class ReversiModel implements GameModel {
         // Insert the collector in the middle of the gameboard.
         this.cursorPos = new Position(midX, midY);
         updateCursor();
+    }
+
+
+    public void addObserver(PropertyChangeListener listener){
+        this.pcs.addPropertyChangeListener(listener);
+    }
+
+    public void removeObserver(PropertyChangeListener listener){
+        this.pcs.removePropertyChangeListener(listener);
     }
 
     /**
@@ -306,6 +322,7 @@ public class ReversiModel implements GameModel {
      */
     @Override
     public void gameUpdate(final int lastKey) throws GameOverException {
+        this.pcs.firePropertyChange("gameUpdate", 0, 1);
         if (!this.gameOver) {
             Position nextCursorPos = getNextCursorPos(updateDirection(lastKey));
             Dimension boardSize = Constants.getGameSize();

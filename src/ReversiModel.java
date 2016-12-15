@@ -322,7 +322,6 @@ public class ReversiModel implements GameModel {
      */
     @Override
     public void gameUpdate(final int lastKey) throws GameOverException {
-        this.pcs.firePropertyChange("gameUpdate", 0, 1);
         if (!this.gameOver) {
             Position nextCursorPos = getNextCursorPos(updateDirection(lastKey));
             Dimension boardSize = Constants.getGameSize();
@@ -337,6 +336,7 @@ public class ReversiModel implements GameModel {
             removeCursor(this.cursorPos);
             this.cursorPos = nextCursorPos;
             updateCursor();
+            this.pcs.firePropertyChange("gameUpdate", 0, 1);
         } else {
             throw new GameOverException(this.blackScore - this.whiteScore);
         }

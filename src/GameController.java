@@ -96,6 +96,8 @@ public class GameController implements Runnable {
 			throw new IllegalStateException("Game is already running");
 		}
 
+		gameModel.addObserver(view);
+
 		// Start listening for key events
 		this.view.addKeyListener(this.keyListener);
 
@@ -149,7 +151,7 @@ public class GameController implements Runnable {
 				// or 0 if no new keypress since last update.
 				this.gameModel.gameUpdate(nextKeyPress());
 
-				this.view.repaint();
+				//this.view.repaint();
 
 				Thread.sleep(this.updateInterval);
 			} catch (GameOverException e) {

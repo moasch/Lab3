@@ -214,8 +214,6 @@ public class GoldModel implements GameModel {
     public void gameUpdate(final int lastKey) throws GameOverException {
         updateDirection(lastKey);
 
-        this.pcs.firePropertyChange("gameUpdate", 0, 1);
-
         // Erase the previous position.
         gameUtils.setGameboardState(this.collectorPos, BLANK_TILE, gameboardState);
         // Change collector position.
@@ -244,6 +242,8 @@ public class GoldModel implements GameModel {
 
         // Add a new coin (simulating moving one coin)
         addCoin();
+
+        this.pcs.firePropertyChange("gameUpdate", 0, 1);
 
     }
 

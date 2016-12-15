@@ -2,13 +2,6 @@ import java.beans.PropertyChangeListener;
 
 public class GameUtils {
 
-    public void addObserver(PropertyChangeListener observer){
-
-    }
-
-    public void removeObserver(PropertyChangeListener observer){
-
-    }
 
     /**
      * Set the tile on a specified position in the gameboard.

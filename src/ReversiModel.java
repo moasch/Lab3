@@ -131,8 +131,6 @@ public class ReversiModel implements GameModel {
     /**
      * Update the direction of the collector
      * according to the users keypress.
-     *
-     * @throws GameOverException
      */
     private Direction updateDirection(final int key) {
         switch (key) {
@@ -353,6 +351,22 @@ public class ReversiModel implements GameModel {
         }
     }
 
+    private GameTile blackOrWhite(int x, int y) {
+        if (board[x][y] == PieceColor.BLACK) {
+            return blackGridTile;
+        } else {
+            return whiteGridTile;
+        }
+    }
+
+    private GameTile cursorTileType() {
+        if (turn == turn.BLACK) {
+            return new CompositeTile(blankTile, cursorBlackTile);
+        } else {
+            return new CompositeTile(blankTile, cursorWhiteTile);
+        }
+    }
+
 
     @Override
     public GameTile getGameboardState(Position pos) {
@@ -361,6 +375,17 @@ public class ReversiModel implements GameModel {
 
     @Override
     public GameTile getGameboardState(int x, int y) {
+        if (isPositionEmpty(new Position(x, y))) {
+            if (cursorPos == new Position(x, y)) {
+                if (canTurn(turn, new Position(x, y))) {
+                    return cursorTileType();
+                } else {
+                    return new CompositeTile(blankTile, cursorRedTile);
+                }
+            } else {
+                return blankTile;
+            }
+        }
+        return blackOrWhite(x, y);
     }
-
 }

@@ -352,6 +352,13 @@ public class ReversiModel implements GameModel {
     }
 
     private GameTile blackOrWhite(int x, int y) {
+        if (cursorPos.equals(new Position(x, y))) {
+            if (board[x][y] == PieceColor.BLACK) {
+                return new CompositeTile(blackGridTile, cursorRedTile);
+            } else {
+                return new CompositeTile(whiteGridTile, cursorRedTile);
+            }
+        }
         if (board[x][y] == PieceColor.BLACK) {
             return blackGridTile;
         } else {
@@ -376,7 +383,7 @@ public class ReversiModel implements GameModel {
     @Override
     public GameTile getGameboardState(int x, int y) {
         if (isPositionEmpty(new Position(x, y))) {
-            if (cursorPos == new Position(x, y)) {
+            if (cursorPos.equals(new Position(x, y))) {
                 if (canTurn(turn, new Position(x, y))) {
                     return cursorTileType();
                 } else {
